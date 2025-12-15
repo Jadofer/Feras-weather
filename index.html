@@ -1,0 +1,321 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feras Weather - Jordan</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        /* Make sure emojis display properly */
+        .emoji {
+            font-family: "Segoe UI Emoji", "Apple Color Emoji", sans-serif;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+
+        button {
+            padding: 12px 24px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+            button:hover {
+                background: #2980b9;
+            }
+
+        /* City buttons styling */
+        .city-buttons {
+            margin: 25px 0;
+        }
+
+        .city-btn {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+            font-family: inherit;
+        }
+
+            .city-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+            }
+
+        /* Jordan specific styling */
+        .jordan-flag {
+            background: linear-gradient(to right, black 33.3%, white 33.3%, white 66.6%, green 66.6%);
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+        }
+
+        .weather-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .weather-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+            .weather-item strong {
+                color: #3498db;
+                display: block;
+                margin-bottom: 5px;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Using HTML entities for emojis to ensure display -->
+        <h1 class="emoji">&#x2600;&#xFE0F; Feras Weather ☁️</h1>
+
+        <!-- Search Box -->
+        <div class="search-box">
+            <input type="text" id="city" value="Amman" placeholder="Enter city name">
+            <button onclick="getWeather()">Get Weather</button>
+        </div>
+
+        <!-- City Buttons with Jordan Cities including Al Karak -->
+        <div class="city-buttons">
+            <h3 style="margin-bottom: 15px; color: #2c3e50; text-align: center;" class="emoji">&#x2600;&#xFE0F; Quick Cities:</h3>
+
+            <!-- Jordan Cities -->
+            <div style="text-align: center; margin-bottom: 15px;">
+                <h4 style="color: #000000; margin-bottom: 10px;" class="emoji">&#x2600;&#xFE0F;&#x1F1F4; Jordan Cities:</h4>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                    <button class="city-btn jordan-flag" onclick="getWeather('Amman')">Amman</button>
+                    <button class="city-btn" onclick="getWeather('Irbid')" style="background: #333333;">Irbid</button>
+                    <button class="city-btn" onclick="getWeather('Zarqa')" style="background: #555555;">Zarqa</button>
+                    <button class="city-btn" onclick="getWeather('Aqaba')" style="background: #777777;">Aqaba</button>
+                    <button class="city-btn" onclick="getWeather('Salt')" style="background: #999999;">Salt</button>
+                    <button class="city-btn" onclick="getWeather('Madaba')" style="background: #bbbbbb; color: #333;">Madaba</button>
+                    <!-- AL KARAK -->
+                    <button class="city-btn" onclick="getWeather('Al Karak')" style="background: #d35400;">Al Karak</button>
+                </div>
+            </div>
+
+            <!-- International Cities -->
+            <div style="text-align: center;">
+                <h4 style="color: #2c3e50; margin-bottom: 10px;" class="emoji">&#x2600;&#xFE0F; International Cities:</h4>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                    <button class="city-btn" onclick="getWeather('Riyadh')" style="background: #27ae60;">&#x1F1F8;&#x1F1E6; Riyadh</button>
+                    <button class="city-btn" onclick="getWeather('Dubai')" style="background: #f39c12;">&#x1F1E6;&#x1F1EA; Dubai</button>
+                    <button class="city-btn" onclick="getWeather('Cairo')" style="background: #1abc9c;">&#x1F1EA;&#x1F1EC; Cairo</button>
+                    <button class="city-btn" onclick="getWeather('London')" style="background: #3498db;">&#x1F1EC;&#x1F1E7; London</button>
+                    <button class="city-btn" onclick="getWeather('Paris')" style="background: #9b59b6;">&#x1F1EB;&#x1F1F7; Paris</button>
+                    <button class="city-btn" onclick="getWeather('Tokyo')" style="background: #e74c3c;">&#x1F1EF;&#x1F1F5; Tokyo</button>
+                    <button class="city-btn" onclick="getWeather('New York')" style="background: #34495e;">&#x1F1FA;&#x1F1F8; New York</button>
+                    <button class="city-btn" onclick="getWeather('Sydney')" style="background: #8e44ad;">&#x1F1E6;&#x1F1FA; Sydney</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weather Results -->
+        <div id="result">
+            <div class="weather-info">
+                <p style="text-align: center; grid-column: 1 / -1;">
+                    Select a city above to see weather information
+                </p>
+            </div>
+        </div>
+      
+            <div style="text-align: center; margin-top: 30px; color: #7f8c8d; font-size: 14px;">
+                <p class="emoji">&#x1F310; <strong>Feras Weather v1.0.0</strong> | Powered by OpenWeatherMap</p>
+                <p class="emoji">Real-time global weather data | Developer: Feras Masarweh| &#x1F1EF;&#x1F1F4; Jordan</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Emoji mapping for weather conditions
+        const weatherEmojis = {
+            'clear sky': '☀️',
+            'few clouds': '⛅',
+            'scattered clouds': '☁️',
+            'broken clouds': '☁️',
+            'shower rain': '🌧️',
+            'rain': '🌧️',
+            'thunderstorm': '⛈️',
+            'snow': '❄️',
+            'mist': '🌫️',
+            'overcast clouds': '☁️'
+        };
+
+        async function getWeather(city = null) {
+            const cityName = city || document.getElementById('city').value.trim();
+            const resultDiv = document.getElementById('result');
+
+            if (!cityName) {
+                alert('Please enter a city name');
+                return;
+            }
+
+            // Update input field if button was clicked
+            if (city) {
+                document.getElementById('city').value = city;
+            }
+
+            resultDiv.innerHTML = '<p style="text-align: center;">&#x2600;&#xFE0F; Loading weather for <strong>' + cityName + '</strong>...</p>';
+
+            try {
+                const response = await fetch('/api/weather/' + encodeURIComponent(cityName));
+
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // Get emoji for weather condition
+                const condition = (data.Description || data.description || '').toLowerCase();
+                const weatherEmoji = weatherEmojis[condition] || '🌈';
+
+                // Create weather display
+                resultDiv.innerHTML = `
+                    <h2 style="color: #2c3e50; text-align: center;" class="emoji">
+                        ${weatherEmoji} ${data.City || data.city}, ${data.Country || data.country}
+                        ${(data.Country || data.country) === 'JO' ? '&#x1F1EF;&#x1F1F4;' : ''}
+                    </h2>
+
+                    <div class="weather-info">
+                        <div class="weather-item">
+                            <strong class="emoji">🌡 Temperature</strong>
+                            ${(data.Temperature || data.temperature || 0).toFixed(1)}°C
+                            <div style="font-size: 14px; color: #7f8c8d;">
+                                Feels like: ${(data.FeelsLike || data.feelsLike || 0).toFixed(1)}°C
+                            </div>
+                        </div>
+
+                        <div class="weather-item">
+                            <strong class="emoji">💧 Humidity</strong>
+                            ${data.Humidity || data.humidity || 0}%
+                        </div>
+
+                        <div class="weather-item">
+                            <strong class="emoji">☁️ Condition</strong>
+                            ${data.Description || data.description || 'No data'}
+                        </div>
+
+                        <div class="weather-item">
+                            <strong class="emoji">💨 Wind Speed</strong>
+                            ${data.WindSpeed || data.windSpeed || 0} m/s
+                        </div>
+
+                        <div class="weather-item">
+                            <strong class="emoji">📊 Pressure</strong>
+                            ${data.Pressure || data.pressure || 0} hPa
+                        </div>
+
+                        <div class="weather-item">
+                            <strong class="emoji">🌅 Sunrise</strong>
+                            ${data.Sunrise ? new Date(data.Sunrise).toLocaleTimeString() : 'N/A'}
+                        </div>
+
+                        <div class="weather-item">
+                            <strong class="emoji">🌇 Sunset</strong>
+                            ${data.Sunset ? new Date(data.Sunset).toLocaleTimeString() : 'N/A'}
+                        </div>
+
+                        <div class="weather-item">
+                            <strong class="emoji">🕒 Updated</strong>
+                            ${data.Date ? new Date(data.Date).toLocaleTimeString() : 'Now'}
+                        </div>
+
+                        <div class="weather-item" style="grid-column: 1 / -1; text-align: center; background: #e8f4fc;">
+                            <strong class="emoji">📡 Data Source</strong>
+                            ${(data.IsRealData || data.isRealData) ?
+                                '✅ Real-time OpenWeatherMap Data' :
+                                '⚠️ Sample Data (API Error)'}
+                            <p style="margin-top: 10px; font-size: 14px;">${data.Message || data.message || ''}</p>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button onclick="getWeather('${cityName.replace(/'/g, "\\'")}')" style="background: #3498db;" class="emoji">
+                           ☁️ Refresh Weather
+                        </button>
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `
+                    <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px;">
+                        <h3 class="emoji">❌ Error Getting Weather</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p>Please try a different city or check the API links below.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Load Amman, Jordan on start
+        document.addEventListener('DOMContentLoaded', function() {
+            getWeather('Amman');
+
+            // Enter key support
+            document.getElementById('city').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') getWeather();
+            });
+        });
+    </script>
+</body>
+</html>
